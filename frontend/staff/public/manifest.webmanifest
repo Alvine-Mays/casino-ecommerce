@@ -1,0 +1,9 @@
+{
+  "name": "Casino Staff",
+  "short_name": "Staff",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#E30613",
+  "icons": []
+}
