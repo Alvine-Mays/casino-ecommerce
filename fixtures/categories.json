@@ -1,0 +1,5 @@
+[
+  {"model": "catalog.category", "pk": 1, "fields": {"name": "Fruits & Légumes", "slug": "fruits-legumes"}},
+  {"model": "catalog.category", "pk": 2, "fields": {"name": "Boucherie", "slug": "boucherie"}},
+  {"model": "catalog.category", "pk": 3, "fields": {"name": "Épicerie", "slug": "epicerie"}}
+]

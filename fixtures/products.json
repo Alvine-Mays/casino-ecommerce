@@ -1,0 +1,4 @@
+[
+  {"model": "catalog.product", "pk": 1, "fields": {"category": 3, "name": "Pâtes Spaghetti", "slug": "pates-spaghetti", "description": "500g", "is_active": true}},
+  {"model": "catalog.product", "pk": 2, "fields": {"category": 1, "name": "Bananes", "slug": "bananes", "description": "1kg", "is_active": true}}
+]

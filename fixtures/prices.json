@@ -1,0 +1,4 @@
+[
+  {"model": "catalog.price", "pk": 1, "fields": {"product": 1, "amount": "1200.00", "currency": "XAF", "is_current": true, "valid_from": "2025-01-01T00:00:00Z"}},
+  {"model": "catalog.price", "pk": 2, "fields": {"product": 2, "amount": "800.00", "currency": "XAF", "is_current": true, "valid_from": "2025-01-01T00:00:00Z"}}
+]
