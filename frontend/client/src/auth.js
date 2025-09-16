@@ -1,5 +1,9 @@
-import axios from 'axios'
+import { api } from './lib/api'
 
+// Gestion simple des tokens côté client + intercepteurs axios
+// - Stockage local (localStorage) de access/refresh
+// - Intercepteur request: ajoute Authorization: Bearer <token>
+// - Intercepteur response: redirige vers /signin en cas de 401
 export function setTokens({ access, refresh }) {
   localStorage.setItem('access', access)
   localStorage.setItem('refresh', refresh)
@@ -16,13 +20,13 @@ export function logout() {
   } catch {}
 }
 
-axios.interceptors.request.use((config) => {
+api.interceptors.request.use((config) => {
   const token = getAccess()
   if (token) config.headers.Authorization = `Bearer ${token}`
   return config
 })
 
-axios.interceptors.response.use(
+api.interceptors.response.use(
   (r) => r,
   (error) => {
     const status = error?.response?.status

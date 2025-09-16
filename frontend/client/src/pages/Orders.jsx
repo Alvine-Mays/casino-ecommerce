@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
+import { api } from '../lib/api'
 
 export default function Orders() {
-  const { data } = useQuery({ queryKey: ['myorders'], queryFn: async () => (await axios.get('/api/orders/mine')).data })
+  const { data } = useQuery({ queryKey: ['myorders'], queryFn: async () => (await api.get('/api/orders/mine')).data })
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Mes commandes</h1>

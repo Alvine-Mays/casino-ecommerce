@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import { api } from '../lib/api'
 
 export default function SlotsSelector({ date, value, onChange }) {
   const [slots, setSlots] = useState([])
   useEffect(() => {
     if (!date) return
-    axios.get(`/api/orders/slots?date=${date}`).then(res => setSlots(res.data.slots))
+    api.get(`/api/orders/slots?date=${date}`).then(res => setSlots(res.data.slots))
   }, [date])
 
   return (

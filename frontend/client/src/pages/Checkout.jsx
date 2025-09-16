@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import axios from 'axios'
+import { api } from '../lib/api'
 import { useState } from 'react'
 import PaymentButtons from '../components/PaymentButtons'
 import PolicyNotice from '../components/PolicyNotice'
@@ -13,7 +13,7 @@ export default function Checkout() {
     pickup_start: '10:00', pickup_end: '12:00'
   })
   const create = useMutation({
-    mutationFn: async () => (await axios.post('/api/orders', form)).data,
+    mutationFn: async () => (await api.post('/api/orders', form)).data,
     onSuccess: setOrder
   })
   return (

@@ -1,16 +1,16 @@
 import { useParams } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import axios from 'axios'
+import { api } from '../lib/api'
 
 export default function ProductDetail() {
   const { id } = useParams()
   const qc = useQueryClient()
   const { data } = useQuery({
     queryKey: ['product', id],
-    queryFn: async () => (await axios.get(`/api/catalog/products/${id}`)).data,
+    queryFn: async () => (await api.get(`/api/catalog/products/${id}`)).data,
   })
   const add = useMutation({
-    mutationFn: async () => (await axios.post('/api/orders/cart/items', { product_id: id, quantity: 1 })).data,
+    mutationFn: async () => (await api.post('/api/orders/cart/items', { product_id: id, quantity: 1 })).data,
     onSuccess: () => qc.invalidateQueries({ queryKey: ['cart'] })
   })
   if (!data) return null

@@ -1,12 +1,12 @@
-import axios from 'axios'
+import { api } from '../lib/api'
 import { useNavigate } from 'react-router-dom'
 
 export default function PaymentButtons({ orderId }) {
   const nav = useNavigate()
   const pay = async () => {
-    const res = await axios.post('/api/payments/intent', { order_id: orderId })
+    const res = await api.post('/api/payments/intent', { order_id: orderId })
     const ref = res.data.reference
-    await axios.post('/api/payments/webhook', { reference: ref, status: 'SUCCEEDED' })
+    await api.post('/api/payments/webhook', { reference: ref, status: 'SUCCEEDED' })
     nav(`/confirmation/${orderId}`)
   }
   return (

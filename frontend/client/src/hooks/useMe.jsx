@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
+import { api } from '../lib/api'
 
-const fetchMe = async () => (await axios.get('/api/auth/me')).data
+const fetchMe = async () => (await api.get('/api/auth/me')).data
 
 export default function useMe(enabled = true) {
   return useQuery({ queryKey: ['me'], queryFn: fetchMe, enabled })

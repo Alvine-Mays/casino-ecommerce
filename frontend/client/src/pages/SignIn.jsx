@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { api } from '../lib/api'
 import { useState } from 'react'
 import { setTokens } from '../auth'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
@@ -10,7 +10,7 @@ export default function SignIn() {
   const search = new URLSearchParams(loc.search)
   const returnUrl = search.get('returnUrl') || '/'
   const submit = async () => {
-    const res = await axios.post('/api/auth/login', form)
+    const res = await api.post('/api/auth/login', form)
     setTokens(res.data)
     nav(returnUrl)
   }

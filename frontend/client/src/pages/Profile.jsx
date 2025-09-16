@@ -1,12 +1,12 @@
 import useMe from '../hooks/useMe'
 import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
+import { api } from '../lib/api'
 
 const STATUSES = ['CREATED','PAID','IN_PREPARATION','READY_FOR_PICKUP','PICKED_UP','CANCELLED_NOT_COLLECTED','CLOSED']
 
 export default function Profile() {
   const { data: me } = useMe(true)
-  const { data: orders } = useQuery({ queryKey: ['myorders'], queryFn: async () => (await axios.get('/api/orders/mine')).data })
+  const { data: orders } = useQuery({ queryKey: ['myorders'], queryFn: async () => (await api.get('/api/orders/mine')).data })
   const list = orders?.results || []
   const counts = STATUSES.reduce((acc, s) => ({ ...acc, [s]: list.filter(o=>o.status===s).length }), {})
 

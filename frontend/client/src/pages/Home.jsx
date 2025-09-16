@@ -1,15 +1,15 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
+import { api } from '../lib/api'
 
 export default function Home() {
   const { data: categories } = useQuery({
     queryKey: ['categories'],
-    queryFn: async () => (await axios.get('/api/catalog/categories')).data,
+    queryFn: async () => (await api.get('/api/catalog/categories')).data,
   })
   const { data: products } = useQuery({
     queryKey: ['products'],
-    queryFn: async () => (await axios.get('/api/catalog/products?is_active=true')).data,
+    queryFn: async () => (await api.get('/api/catalog/products?is_active=true')).data,
   })
 
   return (
@@ -20,9 +20,19 @@ export default function Home() {
       </div>
       <h2 className="text-xl font-semibold mb-2">Catégories</h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
-        {categories?.map((c) => (
-          <div key={c.id} className="border p-3 rounded text-center">{c.name}</div>
+        {categories?.results?.map((c) => (
+          <div key={c.id} className="border p-3 rounded text-center">
+            <div className="w-full h-24 bg-gray-100 rounded mb-2 overflow-hidden">
+              {c.image_url ? (
+                <img src={c.image_url} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-xs text-gray-400">(cat.)</div>
+              )}
+            </div>
+            <div>{c.name}</div>
+          </div>
         ))}
+
       </div>
       <h2 className="text-xl font-semibold mb-2">Produits</h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

@@ -1,12 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import axios from 'axios'
+import { api } from '../lib/api'
 import { Link } from 'react-router-dom'
 
 export default function Cart() {
   const qc = useQueryClient()
-  const { data } = useQuery({ queryKey: ['cart'], queryFn: async () => (await axios.get('/api/orders/cart')).data })
+  const { data } = useQuery({ queryKey: ['cart'], queryFn: async () => (await api.get('/api/orders/cart')).data })
   const remove = useMutation({
-    mutationFn: async (id) => (await axios.delete(`/api/orders/cart/items/${id}`)).data,
+    mutationFn: async (id) => (await api.delete(`/api/orders/cart/items/${id}`)).data,
     onSuccess: () => qc.invalidateQueries({ queryKey: ['cart'] })
   })
   const total = data?.items?.reduce((t, it) => t + (it.quantity || 0), 0)

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
+import { api } from '../lib/api'
 import Scanner from '../components/Scanner'
 
 export default function Dashboard() {
   const [status, setStatus] = useState('PAID')
   const { data, refetch } = useQuery({
     queryKey: ['staff-orders', status],
-    queryFn: async () => (await axios.get(`/api/orders/staff/orders?status=${status}`)).data,
+    queryFn: async () => (await api.get(`/api/orders/staff/orders?status=${status}`)).data,
   })
 
   useEffect(() => {
@@ -30,8 +30,8 @@ export default function Dashboard() {
               <span>#{o.id}</span>
               <span className="text-sm">{o.status}</span>
               <div className="flex gap-2">
-                <button onClick={()=>axios.patch(`/api/orders/staff/orders/${o.id}/prepare`).then(()=>location.reload())} className="px-2 py-1 bg-gray-200 rounded">Préparer</button>
-                <button onClick={()=>axios.patch(`/api/orders/staff/orders/${o.id}/ready`).then(()=>location.reload())} className="px-2 py-1 bg-gray-200 rounded">Prête</button>
+                <button onClick={()=>api.patch(`/api/orders/staff/orders/${o.id}/prepare`).then(()=>location.reload())} className="px-2 py-1 bg-gray-200 rounded">Préparer</button>
+                <button onClick={()=>api.patch(`/api/orders/staff/orders/${o.id}/ready`).then(()=>location.reload())} className="px-2 py-1 bg-gray-200 rounded">Prête</button>
               </div>
             </div>
           </li>
@@ -50,15 +50,15 @@ function TempFinalFlow() {
   const [finalCode, setFinalCode] = useState('')
   const [valid, setValid] = useState(null)
   const validateTemp = async () => {
-    const res = await axios.post('/api/pickup/staff/pickup/validate-temp', { code: temp })
+    const res = await api.post('/api/pickup/staff/pickup/validate-temp', { code: temp })
     setValid(res.data.valid)
   }
   const sendFinal = async () => {
-    await axios.post('/api/pickup/staff/pickup/send-final', { code: temp })
+    await api.post('/api/pickup/staff/pickup/send-final', { code: temp })
     alert('Code final envoyé')
   }
   const validateFinal = async () => {
-    const res = await axios.post('/api/pickup/staff/pickup/validate-final', { code: finalCode })
+    const res = await api.post('/api/pickup/staff/pickup/validate-final', { code: finalCode })
     alert(res.data.valid ? 'Remise effectuée' : 'Code invalide')
   }
   return (

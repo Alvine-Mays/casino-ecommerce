@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { api } from '../lib/api'
 import { useState } from 'react'
 import { setTokens } from '../auth'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
@@ -13,12 +13,22 @@ export default function SignUp() {
   const submit = async () => {
     setError('')
     try {
-      const res = await axios.post('/api/auth/register', form)
+      const res = await api.post('/api/auth/register', form)
       const { access, refresh } = res.data
       if (access && refresh) setTokens({ access, refresh })
       nav(returnUrl)
     } catch (e) {
-      setError(e?.response?.data?.detail || 'Erreur lors de la création du compte')
+      const data = e?.response?.data
+      let msg = 'Erreur lors de la création du compte'
+      if (data) {
+        if (typeof data.detail === 'string') msg = data.detail
+        else if (typeof data === 'object') {
+          const firstKey = Object.keys(data)[0]
+          const firstVal = data[firstKey]
+          if (Array.isArray(firstVal) && firstVal.length) msg = `${firstKey}: ${firstVal[0]}`
+        }
+      }
+      setError(msg)
     }
   }
   return (

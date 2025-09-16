@@ -1,0 +1,49 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import url from 'node:url'
+
+// Petit script de "smoke test" pour vérifier la connectivité front -> back en dev
+// Lecture de VITE_API_URL depuis .env.development (ou process.env) puis GET /api/health/
+// Usage: npm run test:integration
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
+const projectRoot = path.resolve(__dirname, '..')
+
+function loadEnvVar(name) {
+  if (process.env[name]) return process.env[name]
+  const envPath = path.join(projectRoot, '.env.development')
+  try {
+    const text = fs.readFileSync(envPath, 'utf8')
+    for (const rawLine of text.split(/\r?\n/)) {
+      const line = rawLine.trim()
+      if (!line || line.startsWith('#') || !line.includes('=')) continue
+      const [k, v] = line.split('=', 2)
+      if (k === name) return v
+    }
+  } catch {}
+  return null
+}
+
+const apiBase = loadEnvVar('VITE_API_URL') || 'http://127.0.0.1:8000'
+const urlToCheck = `${apiBase.replace(/\/$/, '')}/api/health/`
+
+console.log(`[integration] Checking ${urlToCheck}`)
+
+try {
+  const res = await fetch(urlToCheck, { method: 'GET' })
+  const text = await res.text()
+  let json
+  try { json = JSON.parse(text) } catch {}
+  if (res.status !== 200) {
+    console.error(`[integration] Expected 200, got ${res.status}. Body:`, text)
+    process.exit(1)
+  }
+  if (!json || json.status !== 'ok') {
+    console.error(`[integration] Expected {"status":"ok"}, got:`, text)
+    process.exit(1)
+  }
+  console.log('[integration] OK: backend reachable and healthy')
+  process.exit(0)
+} catch (err) {
+  console.error('[integration] Error contacting backend:', err)
+  process.exit(1)
+}
